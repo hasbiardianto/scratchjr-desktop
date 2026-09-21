@@ -8,6 +8,13 @@ let sounds = {};
 
 function invoke (command, args, fcn) {
     var bridge = window.DesktopInterface;
+    if (!bridge || typeof bridge[command] !== 'function') {
+        if (fcn) {
+            var fallback = command === 'database_query' ? '[]' : 'success';
+            fcn(fallback);
+        }
+        return;
+    }
     var result = bridge[command](args);
     if (result && typeof result.then === 'function') {
         result.then(function (value) {
@@ -21,6 +28,16 @@ function invoke (command, args, fcn) {
 }
 
 export default class Desktop {
+    static getsettings (fcn) {
+        if (window.DesktopInterface && typeof window.DesktopInterface.io_getsettings === 'function') {
+            invoke('io_getsettings', {}, fcn);
+            return;
+        }
+        if (fcn) {
+            fcn(',,,');
+        }
+    }
+
     static stmt (json, fcn) {
         invoke('database_stmt', {json: JSON.stringify(json)}, fcn);
     }
@@ -37,6 +54,12 @@ export default class Desktop {
     }
 
     static getmedia (file, fcn) {
+        if (!window.DesktopInterface) {
+            if (fcn) {
+                fcn('');
+            }
+            return;
+        }
         mediacounter++;
         var key = mediacounter;
         invoke('io_getmedialen', {file: file, key: key}, function (length) {
@@ -174,6 +197,9 @@ export default class Desktop {
     }
 
     static hascamera () {
+        if (!window.DesktopInterface || typeof window.DesktopInterface.scratchjr_cameracheck !== 'function') {
+            return false;
+        }
         return window.DesktopInterface.scratchjr_cameracheck({});
     }
 

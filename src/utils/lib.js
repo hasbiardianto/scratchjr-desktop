@@ -12,7 +12,7 @@ export const fullscreenScaleMultiplier = 136;
 console.log('setting OS flags');
 /* eslint-enable no-console */
 export const isAndroid = (typeof AndroidInterface != 'undefined');
-export const isDesktop = (typeof window.DesktopInterface != 'undefined');
+export const isDesktop = !isAndroid && typeof window.tablet !== 'object';
 export const isiOS = !isAndroid && !isDesktop;
 
 export function libInit () {

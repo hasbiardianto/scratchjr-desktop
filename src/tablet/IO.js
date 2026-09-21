@@ -1,6 +1,6 @@
 import OS from './OS';
 import MediaLib from './MediaLib';
-import {setCanvasSize, drawThumbnail} from '../utils/lib';
+import {setCanvasSize, drawThumbnail, isDesktop} from '../utils/lib';
 import SVG2Canvas from '../utils/SVG2Canvas';
 
 const database = 'projects';
@@ -81,6 +81,16 @@ export default class IO {
         if (MediaLib.keys[md5]) {
             fcn(MediaLib.path + md5); return;
         } // just url link assets do not have photos
+        if (isDesktop && md5.endsWith('.png')) {
+            let baseName = md5.substring(0, md5.length - 4);
+            let libraryAsset = MediaLib.sprites.concat(MediaLib.backgrounds).find((asset) => {
+                return asset.md5.substring(0, asset.md5.lastIndexOf('.')) == baseName;
+            });
+            if (libraryAsset) {
+                fcn(MediaLib.path + libraryAsset.md5);
+                return;
+            }
+        }
         if (md5.indexOf('/') > -1) {
             IO.requestFromServer(md5, gotit); // get url contents
             return;

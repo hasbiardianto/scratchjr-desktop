@@ -46,7 +46,7 @@ export default class OS {
             return;
         }
         var missingAndroid = isAndroid && typeof AndroidInterface === 'undefined';
-        var missingiOS = isiOS && !isDesktop && typeof (window.tablet) !== 'object';
+        var missingiOS = isiOS && typeof (window.tablet) !== 'object';
         if (missingAndroid || missingiOS) {
             // interface not loaded - come back in 100ms
             setTimeout(function () {

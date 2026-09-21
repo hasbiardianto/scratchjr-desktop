@@ -7,7 +7,7 @@ import Paint from '../../painteditor/Paint';
 import Events from '../../utils/Events';
 import Localization from '../../utils/Localization';
 import ScratchAudio from '../../utils/ScratchAudio';
-import {gn, newHTML, scaleMultiplier,
+import {gn, newHTML, scaleMultiplier, isDesktop,
     getDocumentWidth, getDocumentHeight, setProps, newCanvas, frame} from '../../utils/lib';
 
 let selectedOne;
@@ -238,9 +238,10 @@ export default class Library {
         img.style.top = Math.floor(((h - (scale * tb.h)) / 2) + (9 * scaleMultiplier)) + 'px';
         img.style.position = 'relative';
 
-        // Cached downsized-thumbnails are in pnglibrary
-        var pngPath = MediaLib.path.replace('svg', 'png');
-        img.src = pngPath + IO.getFilename(md5) + '.png';
+        // Native editions use cached PNG thumbnails; desktop uses the source SVG.
+        var assetPath = isDesktop ? MediaLib.path + md5 :
+            MediaLib.path.replace('svg', 'png') + IO.getFilename(md5) + '.png';
+        img.src = assetPath;
 
         tb.ontouchstart = function (evt) {
             fcn(evt, tb);
