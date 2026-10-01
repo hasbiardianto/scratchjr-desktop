@@ -55,6 +55,7 @@ spriteform.off {visibility: hidden; };
     top: ${css_vh(0.00)};
     left: ${css_vh(0.00)};
     cursor: default;
+    touch-action: none;
     background: #F5F2F7;
     -webkit-transform-style: preserve-3d;
 }

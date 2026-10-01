@@ -258,7 +258,7 @@ export default class Ghost {
     }
 
     static hittedSingleObject (obj, pt) {
-        var ctx = ScratchJr.workingCanvas.getContext('2d');
+        var ctx = ScratchJr.workingCanvas.getContext('2d', {willReadFrequently: true});
         ctx.clearRect(0, 0, ScratchJr.workingCanvas.width, ScratchJr.workingCanvas.height);
         ctx.save();
         Layer.drawInContext(obj, ctx, Paint.currentZoom);
@@ -272,7 +272,7 @@ export default class Ghost {
         if (Ghost.outsideArea(pt, maskCanvas)) {
             return 0;
         }
-        var ctx = maskCanvas.getContext('2d');
+        var ctx = maskCanvas.getContext('2d', {willReadFrequently: true});
         var pixel = ctx.getImageData(pt.x, pt.y, 1, 1).data;
         var r = pixel[0];
         var g = pixel[1];
@@ -476,12 +476,12 @@ export default class Ghost {
             Math.round(Paint.root.getAttribute('width') * Paint.currentZoom),
             Math.round(Paint.root.getAttribute('height') * Paint.currentZoom)
         );
-        var ctx = ScratchJr.workingCanvas.getContext('2d');
+        var ctx = ScratchJr.workingCanvas.getContext('2d', {willReadFrequently: true});
         if (Ghost.outsideArea(pt, ScratchJr.workingCanvas)) {
             return null;
         }
         ctx.clearRect(0, 0, ScratchJr.workingCanvas.width, ScratchJr.workingCanvas.height);
-        return Ghost.findHit(list, pt, ScratchJr.workingCanvas.getContext('2d'), isTip, exclude);
+        return Ghost.findHit(list, pt, ctx, isTip, exclude);
     }
 
     static findHit (list, pt, ctx, isTip, exclude) {

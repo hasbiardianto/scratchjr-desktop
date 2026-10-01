@@ -318,7 +318,9 @@ export default class Paint {
     }
 
     static gestureChange (e) {
-        e.preventDefault();
+        if (e.cancelable) {
+            e.preventDefault();
+        }
         var scale = Math.min(maxZoom, Events.scaleStartsAt * Events.zoomScale(e));
         scale = Math.max(minZoom, scale);
         var mc = gn('maincanvas');
@@ -335,7 +337,9 @@ export default class Paint {
     }
 
     static gestureEnd (e) {
-        e.preventDefault();
+        if (e.cancelable) {
+            e.preventDefault();
+        }
         window.ontouchmove = undefined;
         window.ontouchend = undefined;
         window.onmousemove = undefined;

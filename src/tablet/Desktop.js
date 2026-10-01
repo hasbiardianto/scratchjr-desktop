@@ -28,6 +28,16 @@ function invoke (command, args, fcn) {
 }
 
 export default class Desktop {
+    static cleanassets (fileType, fcn) {
+        if (window.DesktopInterface && typeof window.DesktopInterface.io_cleanassets === 'function') {
+            invoke('io_cleanassets', {fileType: fileType}, fcn);
+            return;
+        }
+        if (fcn) {
+            fcn();
+        }
+    }
+
     static getsettings (fcn) {
         if (window.DesktopInterface && typeof window.DesktopInterface.io_getsettings === 'function') {
             invoke('io_getsettings', {}, fcn);
